@@ -14,10 +14,10 @@ public class SignUp {
 
 		JFrame frame = new JFrame("Sign Up");
 		
-		JLabel label1 = new JLabel("Please enter your first name:");
+		JLabel label1 = new JLabel("Please enter your id as an integer:");
 		JTextField textField1 = new JTextField(30);
 		
-		JLabel label2 = new JLabel("Please create your id:");
+		JLabel label2 = new JLabel("Please enter your name:");
 		JTextField textField2 = new JTextField(30);
 		
 		JLabel label3 = new JLabel("Please create your password:");
@@ -39,13 +39,34 @@ public class SignUp {
 		
 		frame.getContentPane().add(button);
 		
-		User user = new User(textField1.getText(), textField2.getText(), textField3.getText());
-		
 		button.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int id = 0;
+				String idText = textField1.getText(); // Kullanıcının girdiği id değeri
+
+				// Boş değeri kontrol et
+				if (idText == null || idText.trim().isEmpty()) {
+				    System.out.println("ID boş olamaz!");
+				    JOptionPane.showMessageDialog(null, "ID boş olamaz!");
+				    return; // İşlemi sonlandır
+				}
+
+				// Geçerli bir int değeri olup olmadığını kontrol et
+				try {
+				    id = Integer.parseInt(idText); // String'i int'e çevir
+				} catch (NumberFormatException e1) {
+				    System.out.println("Geçersiz ID değeri!");
+				    JOptionPane.showMessageDialog(null, "Lütfen geçerli bir ID girin.");
+				    return; // İşlemi sonlandır
+				}
+
+				// User objesini oluşturun
+				User user = new User(id, textField2.getText(), textField3.getText());
+
 				JOptionPane.showMessageDialog(frame, "Your account has been created.");
+				user.saveToDatabase();
 				
 			}
 		});
